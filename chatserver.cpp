@@ -13,8 +13,12 @@ ChatServer::ChatServer(QObject *parent)
 //! [1]
 void ChatServer::incomingConnection(qintptr socketDescriptor)
 {
-    ChatThread *thread = new ChatThread(socketDescriptor, this);
+    QThread *thread = new QThread;
+    ChatThread* worker = new ChatThread(socketDescriptor);
+    worker->moveToThread(thread);
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+    connect(thread, SIGNAL(started()), worker, SLOT(run()));
     thread->start();
+    emit incameConnection(socketDescriptor);
 }
 //! [1]

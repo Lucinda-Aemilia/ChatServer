@@ -7,6 +7,7 @@ ConfigDialog::ConfigDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     // find out name of this machine
+    /*
     QString name = QHostInfo::localHostName();
     if (!name.isEmpty()) {
         ui->hostComboBox->addItem(name);
@@ -14,6 +15,7 @@ ConfigDialog::ConfigDialog(QWidget *parent) :
         if (!domain.isEmpty())
             ui->hostComboBox->addItem(name + QChar('.') + domain);
     }
+    */
     /*
     if (name != QLatin1String("localhost"))
         ui->hostComboBox->addItem(QString("localhost"));

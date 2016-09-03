@@ -16,12 +16,12 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     configdialog.cpp \
     chatserver.cpp \
-    chatthread.cpp
+    chatworker.cpp
 
 HEADERS  += mainwindow.h \
     configdialog.h \
     chatserver.h \
-    chatthread.h
+    chatworker.h
 
 FORMS    += mainwindow.ui \
     configdialog.ui

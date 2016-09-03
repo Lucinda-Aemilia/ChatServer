@@ -1,10 +1,10 @@
-#include "chatthread.h"
+#include "chatworker.h"
 
 #include <QtNetwork>
 
 //! [0]
-ChatThread::ChatThread(int socketDescriptor, QObject *parent)
-    : QThread(parent), socketDescriptor(socketDescriptor)
+ChatThread::ChatThread(qintptr socketDescriptor, QObject *parent)
+    : QObject(parent), socketDescriptor(socketDescriptor)
 {
 }
 //! [0]
@@ -12,14 +12,17 @@ ChatThread::ChatThread(int socketDescriptor, QObject *parent)
 //! [1]
 void ChatThread::run()
 {
-    QTcpSocket tcpSocket;
-//! [1] //! [2]
-    if (!tcpSocket.setSocketDescriptor(socketDescriptor)) {
-        emit error(tcpSocket.error());
+    m_tcpSocket = new QTcpSocket;
+
+    if (!m_tcpSocket->setSocketDescriptor(socketDescriptor)) {
+        emit error(m_tcpSocket->error());
         return;
     }
-//! [2] //! [3]
 
+    // 等待登录信息
+    // m_tcpSocket
+
+    /*
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_0);
@@ -30,7 +33,11 @@ void ChatThread::run()
 //! [3] //! [4]
 
     tcpSocket.write(block);
+    */
+
+    /*
     tcpSocket.disconnectFromHost();
     tcpSocket.waitForDisconnected();
+    */
 }
 //! [4]

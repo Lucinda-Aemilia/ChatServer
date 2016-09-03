@@ -1,11 +1,16 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "chatserver.h"
+
 #include <QMainWindow>
 #include <QtNetwork>
 #include <QTcpSocket>
 #include <QTcpServer>
 #include <QNetworkSession>
+#include <QMessageBox>
+#include <QTableWidget>
+#include <QTableWidgetItem>
 
 namespace Ui {
 class MainWindow;
@@ -21,10 +26,17 @@ public:
                         QWidget *parent = 0);
     ~MainWindow();
 
+
+public slots:
+    void readSignInInfo();
+    void incameConnection(const qintptr& socketDescriptor);
+
 private:
     Ui::MainWindow *ui;
     QHostAddress m_address;
     int m_port;
+    ChatServer m_server;
+    QVector<qintptr> m_connections;
 };
 
 #endif // MAINWINDOW_H
