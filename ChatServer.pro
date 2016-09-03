@@ -14,10 +14,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    configdialog.cpp
+    configdialog.cpp \
+    chatserver.cpp \
+    chatthread.cpp
 
 HEADERS  += mainwindow.h \
-    configdialog.h
+    configdialog.h \
+    chatserver.h \
+    chatthread.h
 
 FORMS    += mainwindow.ui \
     configdialog.ui
