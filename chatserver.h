@@ -19,11 +19,11 @@ public:
 
 public slots:
 
-
 signals:
     void incameConnection(const qintptr &socketDescriptor);
     void disconnectedConnection(const qintptr &socketDescriptor);
     void readFromSocket(const qintptr& socketDescriptor, const QString& str);
+    void writeToSocket(const qintptr& socketDescriptor, const QString& str);
 
 protected:
     void incomingConnection(qintptr socketDescriptor) Q_DECL_OVERRIDE;

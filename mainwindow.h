@@ -33,6 +33,9 @@ public slots:
     void socketDisconnectSlot(const qintptr& socketDescriptor);
     void readFromSocket(const qintptr& socketDescriptor, const QString& str);
 
+signals:
+    void writeToSocket(const qintptr& socketDescriptor, const QString& str);
+
 protected:
     void updateTableWidget();
 
@@ -42,6 +45,7 @@ private:
     int m_port;
     ChatServer m_server;
     QVector<qintptr> m_connections;
+    QVector<QString> m_usernames;
 };
 
 #endif // MAINWINDOW_H

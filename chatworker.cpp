@@ -27,8 +27,15 @@ void ChatWorker::run()
 
     // 等待登录信息
     // m_tcpSocket
+    emit establishedConnection();
 
+}
 
+void ChatWorker::writeToSocket(const qintptr &socketDescriptor, const QString &str)
+{
+    qDebug() << "ChatWorker::writeToSocket" << socketDescriptor << str;
+    if (socketDescriptor == -1 || socketDescriptor == this->socketDescriptor)
+        m_tcpSocket->write(str.toLocal8Bit());
 }
 
 void ChatWorker::readAll()

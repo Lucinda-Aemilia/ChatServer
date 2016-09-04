@@ -21,6 +21,8 @@ void ChatServer::incomingConnection(qintptr socketDescriptor)
     // mapper.setMapping(worker, worker);
     connect(worker, SIGNAL(readFromSocket(qintptr,QString)),
             this, SIGNAL(readFromSocket(qintptr,QString)));
+    connect(this, SIGNAL(writeToSocket(qintptr,QString)),
+            worker, SLOT(writeToSocket(qintptr,QString)));
 
     thread->start();
     emit incameConnection(socketDescriptor);

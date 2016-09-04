@@ -14,6 +14,7 @@ public:
     ChatWorker(qintptr socketDescriptor, QObject *parent = NULL);
 
 signals:
+    void establishedConnection();
     void disconnectedConnection(const qintptr& _socketDescriptor);
     void readFromSocket(const qintptr& _socketDescriptor, const QString&);
 
@@ -22,6 +23,7 @@ public slots:
     void socketDisconnectSlot();
     void readAll();
     void write(const QString& str);
+    void writeToSocket(const qintptr& socketDescriptor, const QString& str);
 
 signals:
     void error(QTcpSocket::SocketError socketError);
