@@ -15,10 +15,13 @@ public:
 
 signals:
     void disconnectedConnection(const qintptr& _socketDescriptor);
+    void readFromSocket(const qintptr& _socketDescriptor, const QString&);
 
 public slots:
     void run();
     void socketDisconnectSlot();
+    void readAll();
+    void write(const QString& str);
 
 signals:
     void error(QTcpSocket::SocketError socketError);

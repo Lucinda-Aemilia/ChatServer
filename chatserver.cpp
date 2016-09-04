@@ -8,16 +8,20 @@ ChatServer::ChatServer(QObject *parent)
 {
 
 }
-//! [0]
 
-//! [1]
 void ChatServer::incomingConnection(qintptr socketDescriptor)
 {
     QThread *thread = new QThread;
     ChatWorker* worker = new ChatWorker(socketDescriptor);
+    m_connections.append(worker);
     worker->moveToThread(thread);
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     connect(thread, SIGNAL(started()), worker, SLOT(run()));
+
+    // mapper.setMapping(worker, worker);
+    connect(worker, SIGNAL(readFromSocket(qintptr,QString)),
+            this, SIGNAL(readFromSocket(qintptr,QString)));
+
     thread->start();
     emit incameConnection(socketDescriptor);
 }

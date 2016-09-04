@@ -23,26 +23,22 @@ void ChatWorker::run()
     }
 
     connect(m_tcpSocket, SIGNAL(disconnected()), this, SLOT(socketDisconnectSlot()));
+    connect(m_tcpSocket, SIGNAL(readyRead()), this, SLOT(readAll()));
 
     // 等待登录信息
     // m_tcpSocket
 
-    /*
-    QByteArray block;
-    QDataStream out(&block, QIODevice::WriteOnly);
-    out.setVersion(QDataStream::Qt_4_0);
-    out << (quint16)0;
-    out << "hello";
-    out.device()->seek(0);
-    out << (quint16)(block.size() - sizeof(quint16));
-//! [3] //! [4]
 
-    tcpSocket.write(block);
-    */
-
-    /*
-    tcpSocket.disconnectFromHost();
-    tcpSocket.waitForDisconnected();
-    */
 }
-//! [4]
+
+void ChatWorker::readAll()
+{
+    QString str(m_tcpSocket->readAll());
+    qDebug() << "ChatWorker::readAll()" << str;
+    emit readFromSocket(socketDescriptor, str);
+}
+
+void ChatWorker::write(const QString &str)
+{
+    m_tcpSocket->write(str.toLocal8Bit());
+}

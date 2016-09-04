@@ -17,8 +17,15 @@ MainWindow::MainWindow(const QHostAddress& address,
     ui->portLabel->setText(QString("Listening to port: %1")
                            .arg(port));
 
+    qRegisterMetaType<qintptr>("qintptr");
     connect(&m_server, SIGNAL(incameConnection(qintptr)),
             this, SLOT(incameConnection(qintptr)));
+
+    connect(&m_server, SIGNAL(disconnectedConnection(qintptr)),
+            this, SLOT(socketDisconnectSlot(qintptr)));
+
+    connect(&m_server, SIGNAL(readFromSocket(qintptr,QString)),
+            this, SLOT(readFromSocket(qintptr,QString)));
 
     if (!m_server.listen(m_address, m_port))
     {
@@ -30,11 +37,31 @@ MainWindow::MainWindow(const QHostAddress& address,
     }
 }
 
+void MainWindow::readFromSocket(const qintptr &socketDescriptor, const QString &str)
+{
+    qDebug() << "MainWindow::readFromSocket" << str;
+    QStringList list(str.split('`'));
+    if (list.at(0) == "QUIT")
+    {
+        if (m_connections.contains(socketDescriptor))
+        {
+            int index = m_connections.indexOf(socketDescriptor);
+            m_connections.remove(index);
+            updateTableWidget();
+        }
+    }
+}
+
 void MainWindow::incameConnection(const qintptr &socketDescriptor)
 {
     m_connections.append(socketDescriptor);
 
     // 更新用户列表
+    updateTableWidget();
+}
+
+void MainWindow::updateTableWidget()
+{
     ui->tableWidget->clear();
     ui->tableWidget->setColumnCount(2);
     ui->tableWidget->setRowCount(m_connections.size());
@@ -43,6 +70,16 @@ void MainWindow::incameConnection(const qintptr &socketDescriptor)
         QTableWidgetItem *newItem = new QTableWidgetItem(
                     QString::number(m_connections.at(i)));
         ui->tableWidget->setItem(i, 0, newItem);
+    }
+}
+
+void MainWindow::socketDisconnectSlot(const qintptr &socketDescriptor)
+{
+    if (m_connections.contains(socketDescriptor))
+    {
+        int index = m_connections.indexOf(socketDescriptor);
+        m_connections.remove(index);
+        updateTableWidget();
     }
 }
 
