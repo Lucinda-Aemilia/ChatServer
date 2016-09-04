@@ -6,15 +6,19 @@
 #include <QTcpSocket>
 
 //! [0]
-class ChatThread : public QObject
+class ChatWorker : public QObject
 {
     Q_OBJECT
 
 public:
-    ChatThread(qintptr socketDescriptor, QObject *parent = NULL);
+    ChatWorker(qintptr socketDescriptor, QObject *parent = NULL);
+
+signals:
+    void disconnectedConnection(const qintptr& _socketDescriptor);
 
 public slots:
     void run();
+    void socketDisconnectSlot();
 
 signals:
     void error(QTcpSocket::SocketError socketError);

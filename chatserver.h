@@ -18,6 +18,7 @@ public:
 
 signals:
     void incameConnection(const qintptr &socketDescriptor);
+    void disconnectedConnection(const qintptr &socketDescriptor);
 
 protected:
     void incomingConnection(qintptr socketDescriptor) Q_DECL_OVERRIDE;

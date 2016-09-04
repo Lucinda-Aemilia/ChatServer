@@ -14,7 +14,7 @@ ChatServer::ChatServer(QObject *parent)
 void ChatServer::incomingConnection(qintptr socketDescriptor)
 {
     QThread *thread = new QThread;
-    ChatThread* worker = new ChatThread(socketDescriptor);
+    ChatWorker* worker = new ChatWorker(socketDescriptor);
     worker->moveToThread(thread);
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     connect(thread, SIGNAL(started()), worker, SLOT(run()));

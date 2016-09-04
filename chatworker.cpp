@@ -3,14 +3,17 @@
 #include <QtNetwork>
 
 //! [0]
-ChatThread::ChatThread(qintptr socketDescriptor, QObject *parent)
+ChatWorker::ChatWorker(qintptr socketDescriptor, QObject *parent)
     : QObject(parent), socketDescriptor(socketDescriptor)
 {
 }
-//! [0]
 
-//! [1]
-void ChatThread::run()
+void ChatWorker::socketDisconnectSlot()
+{
+    emit disconnectedConnection(socketDescriptor);
+}
+
+void ChatWorker::run()
 {
     m_tcpSocket = new QTcpSocket;
 
@@ -18,6 +21,8 @@ void ChatThread::run()
         emit error(m_tcpSocket->error());
         return;
     }
+
+    connect(m_tcpSocket, SIGNAL(disconnected()), this, SLOT(socketDisconnectSlot()));
 
     // 等待登录信息
     // m_tcpSocket
