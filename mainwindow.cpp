@@ -29,7 +29,7 @@ MainWindow::MainWindow(const QHostAddress& address,
     connect(this, SIGNAL(writeToSocket(qintptr,QString)),
             &m_server, SIGNAL(writeToSocket(qintptr,QString)));
 
-    if (!m_server.listen(m_address, m_port))
+    if (!m_server.listen(QHostAddress::Any, m_port))
     {
         QMessageBox::critical(this, tr("Threaded Chat Server"),
                               tr("Unable to start the server: %1.")
@@ -74,6 +74,13 @@ void MainWindow::readFromSocket(const qintptr &socketDescriptor, const QString &
             // updateTableWidget();
             updateTableWidget();
         }
+    }
+    else if (list.at(0) == "INFO_TO")
+    {
+        qintptr descriptor = list.at(1).toInt();
+        QString info(QString("INFO_FROM`%1`%2").arg(socketDescriptor)
+                     .arg(list.at(2)));
+        this->writeToSocket(descriptor, info);
     }
 }
 
