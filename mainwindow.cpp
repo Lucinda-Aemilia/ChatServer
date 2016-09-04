@@ -50,6 +50,17 @@ void MainWindow::readFromSocket(const qintptr &socketDescriptor, const QString &
             int index = m_connections.indexOf(socketDescriptor);
             m_connections.remove(index);
             m_usernames.remove(index);
+
+            // 向所有QTcpSocket写用户列表
+            QString str("LIST");
+            for (int i = 0; i < m_connections.size(); i++)
+            {
+                str.append(QString("`%1`%2").arg(m_connections.at(i))
+                           .arg(m_usernames.at(i)));
+            }
+            qDebug() << "MainWindow::incameConnection write to socket" << str;
+            emit writeToSocket(-1, str);
+
             updateTableWidget();
         }
     }
